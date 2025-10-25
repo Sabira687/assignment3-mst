@@ -59,5 +59,11 @@ public class Main {
             System.out.println(result);
             System.out.println("MST Edges: " + result.getMstEdges());
         }
+        for (Graph g : graphs) {
+            System.out.println("\nRunning Kruskal on Graph " + g.getId());
+            MSTResult result = Kruskal.run(g);
+            System.out.println(result);
+            System.out.println("MST Edges: " + result.getMstEdges());
+        }
     }
 }

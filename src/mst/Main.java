@@ -2,8 +2,7 @@ package mst;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.IOException;
+import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -11,11 +10,14 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        String filePath = "data/input.json";
+        String inputPath = "data/input.json";
+        String outputPath = "data/output.json";
+
         List<Graph> graphs = new ArrayList<>();
+        JSONArray resultsArray = new JSONArray();
 
         try {
-            String content = new String(Files.readAllBytes(Paths.get(filePath)));
+            String content = new String(Files.readAllBytes(Paths.get(inputPath)));
             JSONObject json = new JSONObject(content);
             JSONArray graphArray = json.getJSONArray("graphs");
 
@@ -32,38 +34,64 @@ public class Main {
                 JSONArray edges = gObj.getJSONArray("edges");
                 for (int j = 0; j < edges.length(); j++) {
                     JSONObject e = edges.getJSONObject(j);
-                    String from = e.getString("from");
-                    String to = e.getString("to");
-                    int weight = e.getInt("weight");
-                    g.addEdge(from, to, weight);
+                    g.addEdge(e.getString("from"), e.getString("to"), e.getInt("weight"));
                 }
 
                 graphs.add(g);
             }
 
             for (Graph g : graphs) {
-                System.out.println(g);
-                System.out.println("Nodes: " + g.getNodes());
-                System.out.println("Edges: " + g.getEdges());
-                System.out.println("----");
+                MSTResult primRes = Prim.run(g);
+                MSTResult kruskalRes = Kruskal.run(g);
+
+                JSONObject graphResult = new JSONObject();
+                graphResult.put("graph_id", g.getId());
+
+                JSONObject stats = new JSONObject();
+                stats.put("vertices", g.getNodeCount());
+                stats.put("edges", g.getEdgeCount());
+                graphResult.put("input_stats", stats);
+
+                JSONObject prim = new JSONObject();
+                prim.put("mst_edges", toJsonEdges(primRes.getMstEdges()));
+                prim.put("total_cost", primRes.getTotalCost());
+                prim.put("operations_count", primRes.getOperationsCount());
+                prim.put("execution_time_ms", primRes.getExecutionTimeMs());
+                graphResult.put("prim", prim);
+
+                JSONObject kruskal = new JSONObject();
+                kruskal.put("mst_edges", toJsonEdges(kruskalRes.getMstEdges()));
+                kruskal.put("total_cost", kruskalRes.getTotalCost());
+                kruskal.put("operations_count", kruskalRes.getOperationsCount());
+                kruskal.put("execution_time_ms", kruskalRes.getExecutionTimeMs());
+                graphResult.put("kruskal", kruskal);
+
+                resultsArray.put(graphResult);
             }
 
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            JSONObject output = new JSONObject();
+            output.put("results", resultsArray);
+
+            try (FileWriter file = new FileWriter(outputPath)) {
+                file.write(output.toString(2));
+            }
+
+            System.out.println("Saved in " + outputPath);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        for (Graph g : graphs) {
-            System.out.println("\nRunning Prim on Graph " + g.getId());
-            MSTResult result = Prim.run(g);
-            System.out.println(result);
-            System.out.println("MST Edges: " + result.getMstEdges());
+    }
+
+    private static JSONArray toJsonEdges(List<Edge> edges) {
+        JSONArray arr = new JSONArray();
+        for (Edge e : edges) {
+            JSONObject obj = new JSONObject();
+            obj.put("from", e.getFrom());
+            obj.put("to", e.getTo());
+            obj.put("weight", e.getWeight());
+            arr.put(obj);
         }
-        for (Graph g : graphs) {
-            System.out.println("\nRunning Kruskal on Graph " + g.getId());
-            MSTResult result = Kruskal.run(g);
-            System.out.println(result);
-            System.out.println("MST Edges: " + result.getMstEdges());
-        }
+        return arr;
     }
 }

@@ -3,57 +3,58 @@
     {
       "graph_id": 1,
       "input_stats": {
-        "vertices": 5,
-        "edges": 7
+        "vertices": 4,
+        "edges": 5
       },
       "prim": {
-        "mst_edges": [
-          {"from": "B", "to": "C", "weight": 2},
-          {"from": "A", "to": "C", "weight": 3},
-          {"from": "B", "to": "D", "weight": 5},
-          {"from": "D", "to": "E", "weight": 6}
-        ],
-        "total_cost": 16,
-        "operations_count": 42,
-        "execution_time_ms": 1.52
+        "mst_edges": [],
+        "total_cost": 0,
+        "operations_count": 0,
+        "execution_time_ms": 0
       },
       "kruskal": {
-        "mst_edges": [
-          {"from": "B", "to": "C", "weight": 2},
-          {"from": "A", "to": "C", "weight": 3},
-          {"from": "B", "to": "D", "weight": 5},
-          {"from": "D", "to": "E", "weight": 6}
-        ],
-        "total_cost": 16,
-        "operations_count": 37,
-        "execution_time_ms": 1.28
+        "mst_edges": [],
+        "total_cost": 0,
+        "operations_count": 0,
+        "execution_time_ms": 0
       }
     },
     {
       "graph_id": 2,
       "input_stats": {
-        "vertices": 4,
-        "edges": 5
+        "vertices": 10,
+        "edges": 15
       },
       "prim": {
-        "mst_edges": [
-          {"from": "A", "to": "B", "weight": 1},
-          {"from": "B", "to": "C", "weight": 2},
-          {"from": "C", "to": "D", "weight": 3}
-        ],
-        "total_cost": 6,
-        "operations_count": 29,
-        "execution_time_ms": 0.87
+        "mst_edges": [],
+        "total_cost": 0,
+        "operations_count": 0,
+        "execution_time_ms": 0
       },
       "kruskal": {
-        "mst_edges": [
-          {"from": "A", "to": "B", "weight": 1},
-          {"from": "B", "to": "C", "weight": 2},
-          {"from": "C", "to": "D", "weight": 3}
-        ],
-        "total_cost": 6,
-        "operations_count": 31,
-        "execution_time_ms": 0.92
+        "mst_edges": [],
+        "total_cost": 0,
+        "operations_count": 0,
+        "execution_time_ms": 0
+      }
+    },
+    {
+      "graph_id": 3,
+      "input_stats": {
+        "vertices": 20,
+        "edges": 29
+      },
+      "prim": {
+        "mst_edges": [],
+        "total_cost": 0,
+        "operations_count": 0,
+        "execution_time_ms": 0
+      },
+      "kruskal": {
+        "mst_edges": [],
+        "total_cost": 0,
+        "operations_count": 0,
+        "execution_time_ms": 0
       }
     }
   ]
